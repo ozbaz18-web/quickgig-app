@@ -1,39 +1,26 @@
-// app/profile/page.tsx
-"use client";
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+import Link from "next/link";
 
-export default function ProfilePage() {
-  const [name,setName] = useState(""); const [phone,setPhone] = useState(""); const [role,setRole] = useState<"Worker"|"Employer">("Worker");
-
-  useEffect(() => {
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
-      if (data) { setName(data.full_name || ""); setPhone(data.phone || ""); setRole(data.role || "Worker"); }
-    })();
-  }, []);
-
+export default function Home() {
   return (
-    <main dir="rtl" className="container py-8">
-      <h1 className="text-2xl font-bold mb-4">הפרופיל שלי</h1>
-      <form className="space-y-4 max-w-md" onSubmit={async (e) => {
-        e.preventDefault();
-        const { data: { user } } = await supabase.auth.getUser(); if (!user) return;
-        await supabase.from("profiles").upsert({ id:user.id, full_name:name, phone, role });
-        alert("נשמר");
-      }}>
-        <input className="w-full rounded-xl border p-3" placeholder="שם מלא" value={name} onChange={e=>setName(e.target.value)} />
-        <input className="w-full rounded-xl border p-3" placeholder="טלפון" value={phone} onChange={e=>setPhone(e.target.value)} />
-        <select className="w-full rounded-xl border p-3" value={role} onChange={e=>setRole(e.target.value as any)}>
-          <option value="Worker">אני עובד</option>
-          <option value="Employer">אני מעסיק</option>
-        </select>
-        <button className="bg-brand text-white rounded-xl px-4 py-2">שמור</button>
-      </form>
-    </main>
+    <>
+      <h1 className="text-2xl font-bold">ברוכים הבאים ל-QuickGig</h1>
+      <p className="mt-2 text-zinc-600">עבודות חד-פעמיות, מעכשיו לעכשיו.</p>
+
+      <div className="mt-4 flex gap-3">
+        <Link
+          href="/jobs"
+          className="inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium bg-orange-500 text-white hover:bg-orange-600 shadow"
+        >
+          חפש עבודות
+        </Link>
+
+      <Link
+          href="/jobs/new"
+          className="inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium border border-zinc-300 bg-white hover:bg-zinc-50"
+        >
+          פרסם עבודה
+        </Link>
+      </div>
+    </>
   );
 }
-
-

@@ -1,25 +1,30 @@
-// app/layout.tsx
 import "./globals.css";
-import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import Header from "./components/Header";
 import BottomNav from "./components/BottomNav";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "QuickGig",
-  description: "ג'וב בקליק.",
+  description: "ג׳וב בקליק.",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="he" dir="rtl">
-      <body className="min-h-screen bg-white text-zinc-900">
-        {/* רווח בתחתית כדי שהניווט לא יכסה את התוכן */}
-        <div style={{ paddingBottom: 80 }}>{children}</div>
+      <body className="min-h-screen bg-zinc-50 text-zinc-900">
+        <Header />
+
+        {/* התוכן של כל הדפים */}
+        <main className="max-w-screen-md mx-auto px-4 pt-4 pb-24">
+          {children}
+        </main>
+
+        {/* ניווט תחתון פעם אחת בלבד */}
         <BottomNav />
       </body>
     </html>
   );
 }
-
-
-import "./globals.css";
